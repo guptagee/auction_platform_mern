@@ -5,6 +5,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import { sendAuctionCreatedEmail } from "../utils/sendEmail.js";
 
 export const addNewAuctionItem = catchAsyncErrors(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
@@ -37,6 +38,12 @@ export const addNewAuctionItem = catchAsyncErrors(async (req, res, next) => {
     !endTime
   ) {
     return next(new ErrorHandler("Please provide all details.", 400));
+  }
+  
+  // Validate startingBid is a valid positive number
+  const startingBidNum = Number(startingBid);
+  if (isNaN(startingBidNum) || startingBidNum <= 0) {
+    return next(new ErrorHandler("Starting bid must be a valid positive number.", 400));
   }
   if (new Date(startTime) < Date.now()) {
     return next(
@@ -77,20 +84,44 @@ export const addNewAuctionItem = catchAsyncErrors(async (req, res, next) => {
         new ErrorHandler("Failed to upload auction image to cloudinary.", 500)
       );
     }
-    const auctionItem = await Auction.create({
-      title,
-      description,
-      category,
+    console.log('🔍 Debug - Auction creation data:', {
+      title: title.trim(),
+      description: description.trim(),
+      category: category.trim(),
       condition,
-      startingBid,
-      startTime,
-      endTime,
+      startingBid: startingBidNum,
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
+      createdBy: req.user._id,
+      auctioneer: req.user._id,
+      userRole: req.user.role
+    });
+
+    const auctionItem = await Auction.create({
+      title: title.trim(),
+      description: description.trim(),
+      category: category.trim(),
+      condition,
+      startingBid: startingBidNum,
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
       image: {
         public_id: cloudinaryResponse.public_id,
         url: cloudinaryResponse.secure_url,
       },
       createdBy: req.user._id,
+      auctioneer: req.user._id, // Add the missing auctioneer field
     });
+
+    // Send confirmation email to auction creator
+    try {
+      await sendAuctionCreatedEmail(req.user.email, title, req.user.userName);
+      console.log('✅ Auction creation email sent successfully');
+    } catch (emailError) {
+      console.error('❌ Failed to send auction creation email:', emailError);
+      // Don't fail the auction creation if email fails
+    }
+
     return res.status(201).json({
       success: true,
       message: `Auction item created and will be listed on auction page at ${startTime}`,

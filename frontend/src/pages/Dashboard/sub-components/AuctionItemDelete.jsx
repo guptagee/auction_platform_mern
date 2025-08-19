@@ -1,4 +1,4 @@
-import { deleteAuctionItem } from "@/store/slices/superAdminSlice";
+import { deleteAuctionItemAction } from "@/store/slices/superAdminSlice";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ const AuctionItemDelete = () => {
   const dispatch = useDispatch();
 
   const handleAuctionDelete = (id) => {
-    dispatch(deleteAuctionItem(id));
+    dispatch(deleteAuctionItemAction(id));
   };
 
   return (

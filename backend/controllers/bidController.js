@@ -3,6 +3,7 @@ import ErrorHandler from "../middlewares/error.js";
 import { Auction } from "../models/auctionSchema.js";
 import { Bid } from "../models/bidSchema.js";
 import { User } from "../models/userSchema.js";
+import { sendBidPlacedEmail, sendAuctionWonEmail } from "../utils/sendEmail.js";
 
 export const placeBid = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
@@ -60,6 +61,15 @@ export const placeBid = catchAsyncErrors(async (req, res, next) => {
     }
     await auctionItem.save();
 
+    // Send bid confirmation email to bidder
+    try {
+      await sendBidPlacedEmail(req.user.email, auctionItem.title, amount, req.user.userName);
+      console.log('✅ Bid confirmation email sent successfully');
+    } catch (emailError) {
+      console.error('❌ Failed to send bid confirmation email:', emailError);
+      // Don't fail the bid placement if email fails
+    }
+
     res.status(201).json({
       success: true,
       message: "Bid placed.",
@@ -67,5 +77,69 @@ export const placeBid = catchAsyncErrors(async (req, res, next) => {
     });
   } catch (error) {
     return next(new ErrorHandler(error.message || "Failed to place bid.", 500));
+  }
+});
+
+// Function to send winning bid notification manually
+export const sendWinningBidNotification = catchAsyncErrors(async (req, res, next) => {
+  const { auctionId } = req.params;
+  
+  if (!auctionId) {
+    return next(new ErrorHandler("Auction ID is required.", 400));
+  }
+
+  try {
+    // Find the auction
+    const auction = await Auction.findById(auctionId);
+    if (!auction) {
+      return next(new ErrorHandler("Auction not found.", 404));
+    }
+
+    // Check if auction has ended
+    if (new Date(auction.endTime) > new Date()) {
+      return next(new ErrorHandler("Auction has not ended yet.", 400));
+    }
+
+    // Find the highest bidder
+    const highestBid = await Bid.findOne({
+      auctionItem: auction._id,
+      amount: auction.currentBid,
+    });
+
+    if (!highestBid) {
+      return next(new ErrorHandler("No bids found for this auction.", 404));
+    }
+
+    // Get bidder and auctioneer details
+    const bidder = await User.findById(highestBid.bidder.id);
+    const auctioneer = await User.findById(auction.createdBy);
+
+    if (!bidder || !auctioneer) {
+      return next(new ErrorHandler("User information not found.", 404));
+    }
+
+    // Send winning bid notification email
+    await sendAuctionWonEmail(
+      bidder.email, 
+      auction.title, 
+      auction.currentBid, 
+      bidder.userName, 
+      auctioneer
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Winning bid notification sent successfully!",
+      data: {
+        auctionTitle: auction.title,
+        winner: bidder.userName,
+        winningBid: auction.currentBid,
+        emailSentTo: bidder.email
+      }
+    });
+
+  } catch (error) {
+    console.error("Error sending winning bid notification:", error);
+    return next(new ErrorHandler("Failed to send winning bid notification.", 500));
   }
 });

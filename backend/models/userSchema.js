@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema({
       bankAccountName: String,
       bankName: String,
     },
-    easypaisa: {
-      easypaisaAccountNumber: Number,
+    upi: {
+      upiId: String,
     },
     paypal: {
       paypalEmail: String,
@@ -46,6 +46,8 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["Auctioneer", "Bidder", "Super Admin"],
+    // Note: Super Admin role is restricted and cannot be created through user registration
+    // Only existing Super Admins can create new Super Admin users through admin panel
   },
   unpaidCommission: {
     type: Number,

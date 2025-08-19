@@ -10,8 +10,10 @@ import auctionItemRouter from "./router/auctionItemRoutes.js";
 import bidRouter from "./router/bidRoutes.js";
 import commissionRouter from "./router/commissionRouter.js";
 import superAdminRouter from "./router/superAdminRoutes.js";
+import contactRouter from "./router/contactRoutes.js";
 import { endedAuctionCron } from "./automation/endedAuctionCron.js";
 import { verifyCommissionCron } from "./automation/verifyCommissionCron.js";
+import { startAuctionCron } from "./automation/startAuctionCron.js";
 
 const app = express();
 config({
@@ -41,9 +43,11 @@ app.use("/api/v1/auctionitem", auctionItemRouter);
 app.use("/api/v1/bid", bidRouter);
 app.use("/api/v1/commission", commissionRouter);
 app.use("/api/v1/superadmin", superAdminRouter);
+app.use("/api/v1/contact", contactRouter);
 
 endedAuctionCron();
 verifyCommissionCron();
+startAuctionCron();
 connection();
 app.use(errorMiddleware);
 

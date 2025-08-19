@@ -3,6 +3,7 @@ import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
 import { generateToken } from "../utils/jwtToken.js";
+import { sendWelcomeEmail } from "../utils/sendEmail.js";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
@@ -26,22 +27,28 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     bankAccountNumber,
     bankAccountName,
     bankName,
-    easypaisaAccountNumber,
+    upiId,
     paypalEmail,
   } = req.body;
 
   if (!userName || !email || !phone || !password || !address || !role) {
     return next(new ErrorHandler("Please fill full form.", 400));
   }
+  
+  // Prevent Super Admin creation through registration
+  if (role === "Super Admin") {
+    return next(new ErrorHandler("Super Admin role cannot be created through registration.", 403));
+  }
+  
   if (role === "Auctioneer") {
     if (!bankAccountName || !bankAccountNumber || !bankName) {
       return next(
         new ErrorHandler("Please provide your full bank details.", 400)
       );
     }
-    if (!easypaisaAccountNumber) {
+    if (!upiId) {
       return next(
-        new ErrorHandler("Please provide your easypaisa account number.", 400)
+        new ErrorHandler("Please provide your UPI ID.", 400)
       );
     }
     if (!paypalEmail) {
@@ -84,8 +91,8 @@ export const register = catchAsyncErrors(async (req, res, next) => {
         bankAccountName,
         bankName,
       },
-      easypaisa: {
-        easypaisaAccountNumber,
+      upi: {
+        upiId,
       },
       paypal: {
         paypalEmail,
@@ -93,21 +100,43 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     },
   });
   generateToken(user, "User Registered.", 201, res);
+  await sendWelcomeEmail(user.email, user.userName);
 });
 
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
+  
+  console.log("🔍 Login request received:");
+  console.log("Request body:", req.body);
+  console.log("Email:", email);
+  console.log("Password:", password);
+  console.log("Email type:", typeof email);
+  console.log("Password type:", typeof password);
+  
   if (!email || !password) {
+    console.log("❌ Missing email or password");
     return next(new ErrorHandler("Please fill full form."));
   }
+  
+  console.log("🔍 Looking for user with email:", email);
   const user = await User.findOne({ email }).select("+password");
+  
   if (!user) {
+    console.log("❌ User not found with email:", email);
     return next(new ErrorHandler("Invalid credentials.", 400));
   }
+  
+  console.log("✅ User found:", user.email, "Role:", user.role);
+  
   const isPasswordMatch = await user.comparePassword(password);
+  console.log("Password match result:", isPasswordMatch);
+  
   if (!isPasswordMatch) {
+    console.log("❌ Password doesn't match");
     return next(new ErrorHandler("Invalid credentials.", 400));
   }
+  
+  console.log("🎉 Login successful for:", user.email);
   generateToken(user, "Login successfully.", 200, res);
 });
 
@@ -115,6 +144,44 @@ export const getProfile = catchAsyncErrors(async (req, res, next) => {
   const user = req.user;
   res.status(200).json({
     success: true,
+    user,
+  });
+});
+
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+  const {
+    phone,
+    address,
+    bankName,
+    bankAccountNumber,
+    bankAccountName,
+    upiId,
+    paypalEmail,
+  } = req.body;
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return next(new ErrorHandler("User not found.", 404));
+  }
+
+  // Update basic fields
+  if (phone) user.phone = phone;
+  if (address) user.address = address;
+
+  // Update payment methods if user is an auctioneer
+  if (user.role === "Auctioneer") {
+    if (bankName) user.paymentMethods.bankTransfer.bankName = bankName;
+    if (bankAccountNumber) user.paymentMethods.bankTransfer.bankAccountNumber = bankAccountNumber;
+    if (bankAccountName) user.paymentMethods.bankTransfer.bankAccountName = bankAccountName;
+    if (upiId) user.paymentMethods.upi.upiId = upiId;
+    if (paypalEmail) user.paymentMethods.paypal.paypalEmail = paypalEmail;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
     user,
   });
 });
@@ -128,15 +195,40 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
     })
     .json({
       success: true,
-      message: "Logout Successfully.",
+      message: "Logged out successfully",
     });
 });
 
 export const fetchLeaderboard = catchAsyncErrors(async (req, res, next) => {
-  const users = await User.find({ moneySpent: { $gt: 0 } });
-  const leaderboard = users.sort((a, b) => b.moneySpent - a.moneySpent);
+  const leaderboard = await User.find({ role: "Bidder" })
+    .select("userName profileImage moneySpent auctionsWon")
+    .sort({ moneySpent: -1 })
+    .limit(100);
+
   res.status(200).json({
     success: true,
     leaderboard,
   });
+});
+
+export const testEmail = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, userName = 'Test User' } = req.body;
+    
+    if (!email) {
+      return next(new ErrorHandler("Email is required.", 400));
+    }
+
+    // Send test welcome email
+    await sendWelcomeEmail(email, userName);
+    
+    res.status(200).json({
+      success: true,
+      message: "Test email sent successfully!",
+      email: email
+    });
+  } catch (error) {
+    console.error('❌ Test email failed:', error);
+    return next(new ErrorHandler("Failed to send test email.", 500));
+  }
 });

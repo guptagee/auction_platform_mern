@@ -24,11 +24,13 @@ import UserProfile from "./pages/UserProfile";
 
 const App = () => {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(getAllAuctionItems());
     dispatch(fetchLeaderboard());
   }, []);
+  
   return (
     <Router>
       <SideDrawer />

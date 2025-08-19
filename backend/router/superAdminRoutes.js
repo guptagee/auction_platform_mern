@@ -8,6 +8,12 @@ import {
   getPaymentProofDetail,
   monthlyRevenue,
   updateProofStatus,
+  updateUser,
+  deleteUser,
+  getUserActivityLogs,
+  createUserActivityLog,
+  getPlatformSettings,
+  updatePlatformSettings
 } from "../controllers/superAdminController.js";
 
 const router = express.Router();
@@ -54,11 +60,53 @@ router.get(
   fetchAllUsers
 );
 
+router.put(
+  "/users/update/:id",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  updateUser
+);
+
+router.delete(
+  "/users/delete/:id",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  deleteUser
+);
+
+router.get(
+  "/users/activity/:id",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  getUserActivityLogs
+);
+
+router.post(
+  "/users/activity/log",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  createUserActivityLog
+);
+
 router.get(
   "/monthlyincome",
   isAuthenticated,
   isAuthorized("Super Admin"),
   monthlyRevenue
+);
+
+router.get(
+  "/settings",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  getPlatformSettings
+);
+
+router.put(
+  "/settings",
+  isAuthenticated,
+  isAuthorized("Super Admin"),
+  updatePlatformSettings
 );
 
 export default router;

@@ -10,8 +10,19 @@ const auctionSchema = new mongoose.Schema({
     enum: ["New", "Used"],
   },
   currentBid: { type: Number, default: 0 },
-  startTime: String,
-  endTime: String,
+  startTime: {
+    type: Date,
+    required: true,
+  },
+  endTime: {
+    type: Date,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "Active", "Ended", "Cancelled"],
+    default: "Pending"
+  },
   image: {
     public_id: {
       type: String,
@@ -23,6 +34,11 @@ const auctionSchema = new mongoose.Schema({
     },
   },
   createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  auctioneer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -51,5 +67,17 @@ const auctionSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Ensure auctioneer defaults to createdBy if not provided
+auctionSchema.pre("validate", function(next) {
+  if (!this.auctioneer && this.createdBy) {
+    this.auctioneer = this.createdBy;
+  }
+  next();
+});
+
+// Debug: Log the schema structure
+console.log('🔍 Auction Schema compiled with fields:', Object.keys(auctionSchema.paths));
+console.log('🔍 Auctioneer field details:', auctionSchema.paths.auctioneer);
 
 export const Auction = mongoose.model("Auction", auctionSchema);

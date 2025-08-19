@@ -22,19 +22,19 @@ const Home = () => {
 
   const { isAuthenticated } = useSelector((state) => state.user);
   return (
-    <>
-      <section className="w-full ml-0 m-0 h-fit px-5 pt-20 lg:pl-[320px] flex flex-col min-h-screen py-4 justify-center">
-        <div>
-          <p className="text-[#DECCBE] font-bold text-xl mb-8">
+    <section className="w-full ml-0 m-0 h-fit px-5 pt-20 lg:pl-[320px] flex flex-col min-h-screen bg-gradient-to-br from-dashboard-bg to-background">
+      <div className="p-6 lg:p-8">
+        <div className="mb-12">
+          <p className="text-muted-foreground font-semibold text-xl mb-8">
             Transparency Leads to Your Victory
           </p>
           <h1
-            className={`text-[#111] text-2xl font-bold mb-2 min-[480px]:text-4xl md:text-6xl xl:text-7xl 2xl:text-8xl`}
+            className={`text-foreground text-2xl font-bold mb-2 min-[480px]:text-4xl md:text-6xl xl:text-7xl 2xl:text-8xl`}
           >
             Transparent Auctions
           </h1>
           <h1
-            className={`text-[#d6482b] text-2xl font-bold mb-2 min-[480px]:text-4xl md:text-6xl xl:text-7xl 2xl:text-8xl`}
+            className={`text-primary text-2xl font-bold mb-2 min-[480px]:text-4xl md:text-6xl xl:text-7xl 2xl:text-8xl`}
           >
             Be The Winner
           </h1>
@@ -43,13 +43,13 @@ const Home = () => {
               <>
                 <Link
                   to="/sign-up"
-                  className="bg-[#d6482b] font-semibold hover:bg-[#b8381e] rounded-md px-8 flex items-center py-2 text-white  transition-all duration-300"
+                  className="bg-primary font-semibold hover:bg-primary/90 rounded-lg px-8 flex items-center py-3 text-white transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Sign Up
                 </Link>
                 <Link
                   to={"/login"}
-                  className="text-[#DECCBE] bg-transparent border-2 border-[#DECCBE] hover:bg-[#fff3fd] hover:text-[#fdba88] font-bold text-xl  rounded-md px-8 flex items-center py-2 transition-all duration-300"
+                  className="text-primary bg-transparent border-2 border-primary hover:bg-primary/10 font-semibold text-xl rounded-lg px-8 flex items-center py-3 transition-all duration-300"
                 >
                   Login
                 </Link>
@@ -57,27 +57,31 @@ const Home = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-6">
-          <h3 className="text-[#111] text-xl font-semibold mb-2 min-[480px]:text-xl md:text-2xl lg:text-3xl">How it works</h3>
+
+        <div className="mb-12">
+          <h3 className="text-foreground text-xl font-semibold mb-4 min-[480px]:text-xl md:text-2xl lg:text-3xl">
+            How it works
+          </h3>
           <div className="flex flex-col gap-4 md:flex-row md:flex-wrap w-full">
             {howItWorks.map((element) => {
               return (
                 <div
                   key={element.title}
-                  className="bg-white flex flex-col gap-2 p-2 rounded-md h-[96px] justify-center md:w-[48%] lg:w-[47%] 2xl:w-[24%] hover:shadow-md transition-all duration-300"
+                  className="bg-card border border-border flex flex-col gap-3 p-4 rounded-xl h-auto justify-center md:w-[48%] lg:w-[47%] 2xl:w-[24%] hover:shadow-lg transition-all duration-300 hover:border-primary/20"
                 >
-                  <h5 className="font-bold">{element.title}</h5>
-                  <p>{element.description}</p>
+                  <h5 className="font-bold text-foreground">{element.title}</h5>
+                  <p className="text-muted-foreground">{element.description}</p>
                 </div>
               );
             })}
           </div>
         </div>
+
         <FeaturedAuctions />
         <UpcomingAuctions />
         <Leaderboard />
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
