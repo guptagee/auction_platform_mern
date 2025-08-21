@@ -69,7 +69,7 @@ const QuickActions = () => {
       ["Super Admins", userCounts?.superAdmin || 0],
       ["Auctioneers", userCounts?.auctioneers || 0],
       ["Bidders", userCounts?.bidders || 0],
-      ["Total Users", userCounts?.total || 0]
+      ["Total Users (Auctioneers + Bidders)", (userCounts?.auctioneers || 0) + (userCounts?.bidders || 0)]
     ];
     
     return [headers, ...rows].map(row => row.join(",")).join("\n");
@@ -217,8 +217,8 @@ const QuickActions = () => {
               <SafeIcon icon={RiUserLine} className="text-accent text-xl" size={20} />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Users</p>
-              <p className="text-2xl font-bold text-foreground">{userCounts?.total || 0}</p>
+              <p className="text-sm text-muted-foreground">Total Users </p>
+              <p className="text-2xl font-bold text-foreground">{(userCounts?.auctioneers || 0) + (userCounts?.bidders || 0)}</p>
             </div>
           </div>
         </div>

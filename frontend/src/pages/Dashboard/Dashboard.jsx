@@ -19,7 +19,8 @@ import {
   RiTimeLine,
   RiCheckLine,
   RiCloseLine,
-  RiAlertLine
+  RiAlertLine,
+  RiMoneyRupeeCircleLine
 } from "react-icons/ri";
 import { toast } from "react-toastify";
 import "@/dashboard.css";
@@ -103,7 +104,7 @@ const Dashboard = () => {
     
     // Always calculate stats, even with partial data
     const newStats = {
-      totalUsers: userCounts?.total || 0,
+      totalUsers: (userCounts?.auctioneers || 0) + (userCounts?.bidders || 0), // Only Auctioneers + Bidders
       totalRevenue: Array.isArray(monthlyRevenue) && monthlyRevenue.length > 0 
         ? monthlyRevenue.reduce((sum, item) => sum + (Number(item) || 0), 0) 
         : 0,
@@ -345,7 +346,7 @@ const Dashboard = () => {
               <div className="bg-card border border-border rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-success/20 to-success/30 rounded-xl flex items-center justify-center">
-                    <RiMoneyDollarCircleLine className="text-success text-2xl" />
+                    <RiMoneyRupeeCircleLine className="text-success text-2xl" />
                   </div>
                   <RiArrowUpLine className="text-accent text-xl" />
                 </div>

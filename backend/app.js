@@ -22,7 +22,7 @@ config({
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: process.env.FRONTEND_URL.split(',').map(url => url.trim()),
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })

@@ -15,7 +15,7 @@ import {
   RiEditLine,
   RiDeleteBinLine,
   RiAuctionLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiTrophyLine,
   RiStarLine,
   RiCloseLine,
@@ -52,25 +52,37 @@ const UserManagement = () => {
   // Debug logging
   console.log("🔍 UserManagement Debug:");
   console.log("userCounts:", userCounts);
-  console.log("superAdminUsers:", superAdminUsers);
+  console.log("superAdminUsers:", superAdminUsers, "(excluded from display)");
   console.log("auctioneerUsers:", auctioneerUsers);
   console.log("bidderUsers:", bidderUsers);
   console.log("totalAuctioneers (monthly):", totalAuctioneers);
   console.log("totalBidders (monthly):", totalBidders);
 
-  // Use actual user counts for display
-  const actualAuctioneersCount = userCounts?.auctioneers || 0;
-  const actualBiddersCount = userCounts?.bidders || 0;
-  const totalUsersCount = userCounts?.total || 0;
+  // Use actual user counts for display - EXCLUDE Super Admin users
+  const actualAuctioneersCount = auctioneerUsers?.length || 0;
+  const actualBiddersCount = bidderUsers?.length || 0;
+  const totalUsersCount = actualAuctioneersCount + actualBiddersCount; // Exclude Super Admin users
 
-  // Use actual user objects for display
+  // Force the count to be correct - only Auctioneers + Bidders
+  const displayTotalUsers = (auctioneerUsers?.length || 0) + (bidderUsers?.length || 0);
+
+  // Debug the counts
+  console.log("🔢 Count Debug:");
+  console.log("auctioneerUsers array length:", auctioneerUsers?.length);
+  console.log("bidderUsers array length:", bidderUsers?.length);
+  console.log("actualAuctioneersCount:", actualAuctioneersCount);
+  console.log("actualBiddersCount:", actualBiddersCount);
+  console.log("totalUsersCount (calculated):", totalUsersCount);
+  console.log("displayTotalUsers (forced):", displayTotalUsers);
+  console.log("userCounts from backend:", userCounts);
+
+  // Use actual user objects for display - EXCLUDE Super Admin users
   const allUsers = [
-    ...(superAdminUsers || []).map(user => ({ ...user, role: "Super Admin" })),
     ...(auctioneerUsers || []).map(user => ({ ...user, role: "Auctioneer" })),
     ...(bidderUsers || []).map(user => ({ ...user, role: "Bidder" }))
   ];
 
-  console.log("📊 All users for display:", allUsers);
+  console.log("📊 All users for display (excluding Super Admin):", allUsers);
 
   // Action handlers
   const handleViewUser = (user) => {
@@ -218,7 +230,7 @@ const UserManagement = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Users</p>
-              <p className="text-2xl font-bold text-foreground">{totalUsersCount}</p>
+              <p className="text-2xl font-bold text-foreground">{displayTotalUsers}</p>
             </div>
           </div>
         </div>
@@ -272,7 +284,6 @@ const UserManagement = () => {
             <option value="all">All Roles</option>
             <option value="Auctioneer">Auctioneers</option>
             <option value="Bidder">Bidders</option>
-            <option value="Super Admin">Super Admins</option>
           </select>
           
           {/* Sort By */}
@@ -375,7 +386,7 @@ const UserManagement = () => {
                             <span className="truncate">Won: {user.auctionsWon || 0}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <RiMoneyDollarCircleLine size={14} className="flex-shrink-0" />
+                            <RiMoneyRupeeCircleLine size={14} className="flex-shrink-0" />
                             <span className="truncate">Spent: {formatCurrency(user.moneySpent || 0)}</span>
                           </div>
                         </>
@@ -386,7 +397,7 @@ const UserManagement = () => {
                             <span className="truncate">Auctions: {user.auctionsCreated || 0}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <RiMoneyDollarCircleLine size={14} className="flex-shrink-0" />
+                            <RiMoneyRupeeCircleLine size={14} className="flex-shrink-0" />
                             <span className="truncate">Commission: {formatCurrency(user.unpaidCommission || 0)}</span>
                           </div>
                         </>
@@ -573,7 +584,6 @@ const UserManagement = () => {
                 >
                   <option value="Bidder">Bidder</option>
                   <option value="Auctioneer">Auctioneer</option>
-                  <option value="Super Admin">Super Admin</option>
                 </select>
               </div>
               <div className="md:col-span-2">

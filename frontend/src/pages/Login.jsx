@@ -12,8 +12,9 @@ const Login = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [serverError, setServerError] = useState("");
 
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { loading, isAuthenticated, error } = useSelector((state) => state.user);
 
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
@@ -27,9 +28,16 @@ const Login = () => {
     return password.length >= 8;
   };
 
+  const clearErrors = () => {
+    setEmailError("");
+    setPasswordError("");
+    setServerError("");
+  };
+
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
+    clearErrors(); // Clear server errors when user starts typing
     if (value && !validateEmail(value)) {
       setEmailError("Please enter a valid email address");
     } else {
@@ -40,6 +48,7 @@ const Login = () => {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
+    clearErrors(); // Clear server errors when user starts typing
     if (value && !validatePassword(value)) {
       setPasswordError("Password must be at least 8 characters");
     } else {
@@ -49,6 +58,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    
+    // Clear any previous server errors
+    setServerError("");
     
     // Validate before submission
     if (!validateEmail(email)) {
@@ -72,6 +84,13 @@ const Login = () => {
     
     dispatch(login(loginData));
   };
+
+  // Handle server errors from Redux state
+  useEffect(() => {
+    if (error) {
+      setServerError(error);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -98,6 +117,19 @@ const Login = () => {
 
           {/* Login Form */}
           <div className="bg-card border border-border rounded-2xl p-8 shadow-xl backdrop-blur-sm">
+            {/* Server Error Display */}
+            {serverError && (
+              <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <RiErrorWarningLine className="text-destructive text-xl flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-destructive">Login Failed</p>
+                    <p className="text-xs text-destructive/80">{serverError}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <form onSubmit={handleLogin} className="space-y-6">
               {/* Email Field */}
               <div className="space-y-2">

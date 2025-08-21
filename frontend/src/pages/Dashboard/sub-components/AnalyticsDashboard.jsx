@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { 
-  RiBarChartLine, 
   RiBarChart2Line, 
-  RiCalendarLine,
+  RiUserLine, 
+  RiAuctionLine, 
+  RiMoneyRupeeCircleLine, 
+  RiMoreLine, 
+  RiCalendarLine, 
   RiTimeLine,
-  RiMoneyDollarCircleLine,
-  RiUserLine,
-  RiAuctionLine,
-  RiTrophyLine,
-  RiMoreLine
+  RiArrowUpLine,
+  RiArrowDownLine
 } from "react-icons/ri";
 
 const AnalyticsDashboard = () => {
@@ -122,11 +122,11 @@ const AnalyticsDashboard = () => {
 
   const getMetricIcon = () => {
     switch (selectedMetric) {
-      case "revenue": return RiMoneyDollarCircleLine;
+      case "revenue": return RiMoneyRupeeCircleLine;
       case "users": return RiUserLine;
       case "auctions": return RiAuctionLine;
       case "conversions": return RiBarChart2Line; // Changed from RiTrendingUpLine
-      default: return RiMoneyDollarCircleLine;
+      default: return RiMoneyRupeeCircleLine;
     }
   };
 
@@ -255,7 +255,7 @@ const AnalyticsDashboard = () => {
           title="Total Revenue"
           value={formatCurrency(analytics.totalRevenue)}
           change={12.5}
-          icon={RiMoneyDollarCircleLine}
+          icon={RiMoneyRupeeCircleLine}
           color="success"
         />
         <MetricCard

@@ -2,16 +2,15 @@ import { postCommissionProof } from "@/store/slices/commissionSlice";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { 
-  RiMoneyDollarCircleLine, 
   RiImageLine, 
-  RiFileTextLine, 
   RiUpload2Line, 
   RiCheckLine,
   RiAlertLine,
+  RiMoneyRupeeCircleLine,
+  RiArrowRightLine,
   RiReceiptLine,
-  RiBankCardLine,
-  RiShieldCheckLine,
-  RiStarLine
+  RiStarLine,
+  RiFileTextLine
 } from "react-icons/ri";
 
 const SubmitCommission = () => {
@@ -134,7 +133,7 @@ const SubmitCommission = () => {
               <div className="group space-y-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-success/20 to-success/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <RiMoneyDollarCircleLine className="text-success text-2xl" />
+                    <RiMoneyRupeeCircleLine className="text-success text-2xl" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-foreground">Commission Amount</h2>
@@ -160,7 +159,7 @@ const SubmitCommission = () => {
                     step="0.01"
                     required
                   />
-                  <RiMoneyDollarCircleLine className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+                  <RiMoneyRupeeCircleLine className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
                   {amount && !errors.amount && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
                       <RiCheckLine className="text-success" size={20} />

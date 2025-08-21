@@ -5,12 +5,12 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { 
-  RiAuctionFill, 
+  RiAuctionLine, 
   RiSearchLine, 
   RiFilter3Line, 
   RiAddLine, 
   RiTimeLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiEyeLine,
   RiEditLine,
   RiDeleteBinLine,
@@ -123,7 +123,7 @@ const ViewMyAuctions = () => {
               <div className="flex items-center gap-6 mb-6">
                 <div className="relative">
                   <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center shadow-2xl">
-                    <RiAuctionFill className="text-white text-3xl" />
+                    <RiAuctionLine className="text-white text-3xl" />
                   </div>
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
                     <RiStarLine className="text-white text-sm" />
@@ -285,7 +285,7 @@ const ViewMyAuctions = () => {
             /* Empty State */
             <div className="text-center py-16">
               <div className="w-24 h-24 bg-gradient-to-br from-muted/30 to-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <RiAuctionFill className="text-muted-foreground text-4xl" />
+                <RiAuctionLine className="text-muted-foreground text-4xl" />
               </div>
               <h3 className="text-2xl font-semibold text-foreground mb-3">
                 {searchTerm || statusFilter !== "all" ? "No auctions found" : "No auctions yet"}

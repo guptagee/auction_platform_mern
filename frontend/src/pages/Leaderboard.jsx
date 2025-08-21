@@ -8,7 +8,7 @@ import {
   RiSearchLine,
   RiFilter3Line,
   RiUserLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiAuctionLine,
   RiFireLine
 } from "react-icons/ri";
@@ -244,7 +244,7 @@ const Leaderboard = () => {
                       {/* Money Spent Column */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-2">
-                          <RiMoneyDollarCircleLine className="text-success text-lg" />
+                          <RiMoneyRupeeCircleLine className="text-success text-lg" />
                           <span className="font-semibold text-foreground">
                             {formatCurrency(user.moneySpent)}
                           </span>

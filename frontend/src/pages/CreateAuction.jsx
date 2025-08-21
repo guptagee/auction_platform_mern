@@ -7,7 +7,7 @@ import {
   RiAuctionFill, 
   RiImageLine, 
   RiCalendarLine, 
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiPriceTag3Line,
   RiFileTextLine,
   RiUpload2Line,
@@ -222,8 +222,8 @@ const CreateAuction = () => {
                 {/* Enhanced Starting Bid Input */}
                 <div className="space-y-3">
                   <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                    <RiMoneyDollarCircleLine className="text-primary" size={18} />
-                    Starting Bid ($)
+                    <RiMoneyRupeeCircleLine className="text-primary" size={18} />
+                    Starting Bid (₹)
                   </label>
                   <div className="relative group">
                     <input
@@ -236,7 +236,7 @@ const CreateAuction = () => {
                       step="0.01"
                       required
                     />
-                    <RiMoneyDollarCircleLine className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors duration-300" size={20} />
+                    <RiMoneyRupeeCircleLine className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-hover:text-primary transition-colors duration-300" size={20} />
                     {startingBid && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
                         <RiCheckLine className="text-success" size={20} />

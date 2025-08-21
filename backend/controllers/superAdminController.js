@@ -272,6 +272,11 @@ export const updateUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("You cannot modify Super Admin users.", 403));
   }
 
+  // Prevent changing users to Super Admin role (security measure)
+  if (role === "Super Admin") {
+    return next(new ErrorHandler("Cannot change user role to Super Admin through this interface.", 403));
+  }
+
   // Check if email is already taken by another user
   if (email && email !== existingUser.email) {
     const emailExists = await User.findOne({ email, _id: { $ne: id } });

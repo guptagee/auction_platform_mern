@@ -9,7 +9,7 @@ import {
   RiGridLine, 
   RiListUnordered,
   RiTimeLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiFireLine
 } from "react-icons/ri";
 
@@ -174,11 +174,11 @@ const Auctions = () => {
             <div className="bg-card border border-border rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                  <RiMoneyDollarCircleLine className="text-accent text-xl" />
+                  <RiMoneyRupeeCircleLine className="text-accent text-xl" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Total Value</p>
-                  <p className="text-2xl font-bold text-foreground">${stats.totalValue}</p>
+                  <p className="text-2xl font-bold text-foreground">₹{stats.totalValue}</p>
                 </div>
               </div>
             </div>

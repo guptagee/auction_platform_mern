@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { 
   RiSettingsLine, 
   RiShieldCheckLine, 
-  RiMoneyDollarCircleLine, 
+  RiMoneyRupeeCircleLine, 
   RiSaveLine,
   RiRefreshLine,
   RiEditLine,
@@ -399,7 +399,7 @@ const AdminSettings = () => {
       </div>
 
       {/* Current Settings Summary */}
-      <SettingCard title="Current Settings Summary" icon={RiMoneyDollarCircleLine} className="lg:col-span-2">
+      <SettingCard title="Current Settings Summary" icon={RiMoneyRupeeCircleLine} className="lg:col-span-2">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="p-4 bg-muted/30 rounded-lg">
             <h4 className="text-sm font-medium text-muted-foreground mb-1">Commission Rate</h4>

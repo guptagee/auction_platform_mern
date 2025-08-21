@@ -12,7 +12,7 @@ import {
   RiCalendarLine,
   RiBankLine,
   RiPaypalLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiTrophyLine,
   RiEditLine,
   RiSaveLine,
@@ -312,7 +312,7 @@ const UserProfile = () => {
               <div className="bg-card border border-border rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-gradient-to-br from-accent/20 to-accent/30 rounded-2xl flex items-center justify-center">
-                    <RiMoneyDollarCircleLine className="text-accent text-2xl" />
+                    <RiMoneyRupeeCircleLine className="text-accent text-2xl" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-foreground">Payment Methods</h2>

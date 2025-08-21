@@ -5,20 +5,25 @@ import jwt from "jsonwebtoken";
 const userSchema = new mongoose.Schema({
   userName: {
     type: String,
-    minLength: [3, "Username must caontain at least 3 characters."],
+    minLength: [3, "Username must contain at least 3 characters."],
     maxLength: [40, "Username cannot exceed 40 characters."],
   },
   password: {
     type: String,
     selected: false,
-    minLength: [8, "Password must caontain at least 8 characters."],
+    minLength: [8, "Password must contain at least 8 characters."],
   },
   email: String,
   address: String,
   phone: {
     type: String,
-    minLength: [11, "Phone Number must caontain exact 11 digits."],
-    maxLength: [11, "Phone Number must caontain exact 11 digits."],
+    required: [true, "Phone number is required"],
+    validate: {
+      validator: function(v) {
+        return /^\d{10}$/.test(v);
+      },
+      message: "Phone number must contain exactly 10 digits"
+    }
   },
   profileImage: {
     public_id: {

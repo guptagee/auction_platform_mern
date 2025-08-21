@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { 
   RiArrowRightLine, 
   RiTimeLine, 
-  RiMoneyDollarCircleLine, 
+  RiMoneyRupeeCircleLine, 
   RiUserLine, 
   RiTrophyLine,
   RiCalendarLine,
@@ -227,7 +227,7 @@ const ViewAuctionDetails = () => {
                       
                       <div className="bg-muted/30 rounded-xl p-4 border border-border">
                         <div className="flex items-center gap-3 mb-2">
-                          <RiMoneyDollarCircleLine className="text-success text-lg" />
+                          <RiMoneyRupeeCircleLine className="text-success text-lg" />
                           <span className="text-sm font-medium text-muted-foreground">Starting Bid</span>
                         </div>
                         <p className="text-lg font-semibold text-foreground">

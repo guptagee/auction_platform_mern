@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { RiTimeLine, RiMoneyDollarCircleLine, RiArrowRightLine, RiPriceTag3Line } from "react-icons/ri";
+import { RiTimeLine, RiMoneyRupeeCircleLine, RiArrowRightLine, RiPriceTag3Line } from "react-icons/ri";
 
 const Card = ({ 
   imgSrc, 
@@ -114,19 +114,19 @@ const Card = ({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center gap-2">
-                <RiMoneyDollarCircleLine className="text-muted-foreground" size={18} />
+                <RiMoneyRupeeCircleLine className="text-muted-foreground" size={18} />
                 <div>
                   <p className="text-xs text-muted-foreground">Starting Bid</p>
-                  <p className="font-semibold text-foreground">${startingBid?.toLocaleString()}</p>
+                  <p className="font-semibold text-foreground">₹{startingBid?.toLocaleString()}</p>
                 </div>
               </div>
               
               {currentBid > startingBid && (
                 <div className="flex items-center gap-2">
-                  <RiMoneyDollarCircleLine className="text-success" size={18} />
+                  <RiMoneyRupeeCircleLine className="text-success" size={18} />
                   <div>
                     <p className="text-xs text-muted-foreground">Current Bid</p>
-                    <p className="font-semibold text-success">${currentBid?.toLocaleString()}</p>
+                    <p className="font-semibold text-success">₹{currentBid?.toLocaleString()}</p>
                   </div>
                 </div>
               )}
@@ -203,19 +203,19 @@ const Card = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <RiMoneyDollarCircleLine className="text-muted-foreground" size={16} />
+              <RiMoneyRupeeCircleLine className="text-muted-foreground" size={16} />
               <span className="text-sm text-muted-foreground">Starting Bid</span>
             </div>
-            <span className="font-semibold text-foreground">${startingBid?.toLocaleString()}</span>
+            <span className="font-semibold text-foreground">₹{startingBid?.toLocaleString()}</span>
           </div>
 
           {currentBid > startingBid && (
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <RiMoneyDollarCircleLine className="text-success" size={16} />
+                <RiMoneyRupeeCircleLine className="text-success" size={16} />
                 <span className="text-sm text-muted-foreground">Current Bid</span>
               </div>
-              <span className="font-semibold text-success">${currentBid?.toLocaleString()}</span>
+              <span className="font-semibold text-success">₹{currentBid?.toLocaleString()}</span>
             </div>
           )}
 

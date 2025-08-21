@@ -3,7 +3,7 @@ import {
   RiUserAddLine,
   RiAuctionLine,
   RiMailLine,
-  RiMoneyDollarCircleLine,
+  RiMoneyRupeeCircleLine,
   RiFileTextLine,
   RiRefreshLine,
   RiArrowRightLine,
@@ -41,7 +41,7 @@ const HowItWorks = () => {
       borderColor: "border-green-200"
     },
     {
-      icon: RiMoneyDollarCircleLine,
+      icon: RiMoneyRupeeCircleLine,
       title: "Commission Payment",
       description: "Auctioneers pay a 5% commission on successful sales to support platform maintenance and development.",
       color: "from-yellow-500 to-yellow-600",

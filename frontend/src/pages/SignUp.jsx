@@ -54,8 +54,8 @@ const SignUp = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value) ? "" : "Please enter a valid email address";
       case 'phone':
-        const phoneRegex = /^\d{11}$/;
-        return phoneRegex.test(value) ? "" : "Phone number must be exactly 11 digits";
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(value) ? "" : "Phone number must be exactly 10 digits";
       case 'address':
         return value.length >= 10 ? "" : "Address must be at least 10 characters";
       case 'password':
@@ -275,10 +275,17 @@ const SignUp = () => {
                       <input
                         type="tel"
                         value={phone}
-                        onChange={(e) => handleFieldChange('phone', e.target.value)}
+                        onChange={(e) => {
+                          // Only allow numeric input
+                          const value = e.target.value.replace(/\D/g, '');
+                          handleFieldChange('phone', value);
+                        }}
                         onFocus={() => setFocusedField('phone')}
                         onBlur={() => setFocusedField('')}
-                        placeholder="Enter your phone number"
+                        placeholder="Enter your 10-digit phone number"
+                        maxLength={10}
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
                         className={getInputClassName('phone')}
                         required
                       />
@@ -292,6 +299,9 @@ const SignUp = () => {
                         {errors.phone}
                       </p>
                     )}
+                    <p className="text-xs text-muted-foreground">
+                      Phone number must be exactly 10 digits (e.g., 9876543210)
+                    </p>
                   </div>
                   
                   <div className="space-y-2">
